@@ -4,6 +4,12 @@ namespace:
 
 replicaCount: 1
 
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 60
+
 image:
   repository: ghcr.io/nthung2499/fake-gk
   tag: latest
@@ -43,4 +49,10 @@ probes:
     periodSeconds: 10
     timeoutSeconds: 3
 
-resources: {}
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
