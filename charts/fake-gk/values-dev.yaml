@@ -1,0 +1,32 @@
+namespace:
+  create: true
+  name: fake-gk
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/nthung2499/fake-gk
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 3000
+
+ingress:
+  enabled: true
+  className: traefik
+  host: ""
+  path: /
+  pathType: Prefix
+
+env:
+  PORT: "3000"
+  MYSQL_HOST: mysql.database.svc.cluster.local
+  MYSQL_PORT: "3306"
+  MYSQL_DATABASE: appdb
+  MYSQL_USER: appuser
+  MYSQL_CONNECTION_LIMIT: "10"
+
+secret:
+  MYSQL_PASSWORD: apppass123

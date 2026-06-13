@@ -1,0 +1,6 @@
+apiVersion: v2
+name: fake-gk
+description: A Google Keep-like Node.js notes app backed by MySQL
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
