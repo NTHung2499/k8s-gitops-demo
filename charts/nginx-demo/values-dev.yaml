@@ -2,7 +2,7 @@ namespace:
   create: true
   name: demo-helm
 
-replicaCount: 8
+replicaCount: 5
 
 ingress:
   enabled: true
