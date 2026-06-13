@@ -1,0 +1,12 @@
+namespace:
+  create: true
+  name: demo-helm
+
+replicaCount: 3
+
+ingress:
+  enabled: true
+  className: traefik
+  host: ""
+  path: /
+  pathType: Prefix

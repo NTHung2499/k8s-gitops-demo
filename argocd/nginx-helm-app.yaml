@@ -11,17 +11,8 @@ spec:
     path: charts/nginx-demo
     helm:
       releaseName: nginx-helm
-      values: |
-        namespace:
-          create: true
-          name: demo-helm
-        replicaCount: 3
-        ingress:
-          enabled: true
-          className: traefik
-          host: ""
-          path: /
-          pathType: Prefix
+      valueFiles:
+        - values-dev.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: demo-helm
