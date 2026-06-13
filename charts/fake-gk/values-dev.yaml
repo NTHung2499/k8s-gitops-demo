@@ -4,7 +4,7 @@ namespace:
 replicaCount: 2
 image:
   repository: ghcr.io/nthung2499/fake-gk
-  tag: 2026.06.13.0743
+  tag: 2026.06.13.0800
   pullPolicy: Always
 service:
   type: ClusterIP
