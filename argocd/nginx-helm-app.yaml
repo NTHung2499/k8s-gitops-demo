@@ -15,7 +15,7 @@ spec:
         namespace:
           create: true
           name: demo-helm
-        replicaCount: 1
+        replicaCount: 3
         ingress:
           enabled: true
           className: traefik
