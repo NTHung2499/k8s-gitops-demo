@@ -1,23 +1,28 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mysql
-  namespace: database
+  name: {{ .Release.Name }}
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
-  serviceName: mysql-headless
-  replicas: 1
+  serviceName: {{ .Release.Name }}-headless
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: mysql
+      app.kubernetes.io/name: {{ .Chart.Name }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: mysql
+        app.kubernetes.io/name: {{ .Chart.Name }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       containers:
         - name: mysql
-          image: mysql:8.4
-          imagePullPolicy: IfNotPresent
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: mysql
               containerPort: 3306
@@ -25,22 +30,22 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secret
+                  name: {{ .Release.Name }}-secret
                   key: MYSQL_ROOT_PASSWORD
             - name: MYSQL_DATABASE
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secret
+                  name: {{ .Release.Name }}-secret
                   key: MYSQL_DATABASE
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secret
+                  name: {{ .Release.Name }}-secret
                   key: MYSQL_USER
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secret
+                  name: {{ .Release.Name }}-secret
                   key: MYSQL_PASSWORD
           readinessProbe:
             exec:
@@ -48,34 +53,36 @@ spec:
                 - sh
                 - -c
                 - mysqladmin ping -h 127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD"
-            initialDelaySeconds: 20
-            periodSeconds: 10
-            timeoutSeconds: 5
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
           livenessProbe:
             exec:
               command:
                 - sh
                 - -c
                 - mysqladmin ping -h 127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD"
-            initialDelaySeconds: 60
-            periodSeconds: 20
-            timeoutSeconds: 5
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
           volumeMounts:
             - name: mysql-data
               mountPath: /var/lib/mysql
             - name: mysql-config
               mountPath: /etc/mysql/conf.d
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
       volumes:
         - name: mysql-config
           configMap:
-            name: mysql-config
+            name: {{ .Release.Name }}-config
   volumeClaimTemplates:
     - metadata:
         name: mysql-data
       spec:
         accessModes:
           - ReadWriteOnce
-        storageClassName: local-path
+        storageClassName: {{ .Values.storage.className }}
         resources:
           requests:
-            storage: 2Gi
+            storage: {{ .Values.storage.size }}

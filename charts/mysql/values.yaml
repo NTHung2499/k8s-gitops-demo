@@ -1,0 +1,40 @@
+namespace:
+  create: true
+  name: database
+
+replicaCount: 1
+
+image:
+  repository: mysql
+  tag: "8.4"
+  pullPolicy: IfNotPresent
+
+auth:
+  rootPassword: rootpass123
+  database: appdb
+  username: appuser
+  password: apppass123
+
+service:
+  port: 3306
+
+storage:
+  className: local-path
+  size: 2Gi
+
+mysqlConfig: |
+  [mysqld]
+  character-set-server=utf8mb4
+  collation-server=utf8mb4_unicode_ci
+
+readinessProbe:
+  initialDelaySeconds: 20
+  periodSeconds: 10
+  timeoutSeconds: 5
+
+livenessProbe:
+  initialDelaySeconds: 60
+  periodSeconds: 20
+  timeoutSeconds: 5
+
+resources: {}

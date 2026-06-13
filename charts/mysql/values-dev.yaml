@@ -1,0 +1,15 @@
+namespace:
+  create: true
+  name: database
+
+replicaCount: 1
+
+auth:
+  rootPassword: rootpass123
+  database: appdb
+  username: appuser
+  password: apppass123
+
+storage:
+  className: local-path
+  size: 2Gi

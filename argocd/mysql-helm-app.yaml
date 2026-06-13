@@ -8,7 +8,11 @@ spec:
   source:
     repoURL: https://github.com/NTHung2499/k8s-gitops-demo.git
     targetRevision: main
-    path: apps/mysql
+    path: charts/mysql
+    helm:
+      releaseName: mysql
+      valueFiles:
+        - values-dev.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: database
