@@ -9,7 +9,7 @@ autoscaling:
   targetCPUUtilizationPercentage: 50
 image:
   repository: ghcr.io/nthung2499/fake-gk
-  tag: 2026.06.13.1524
+  tag: 2026.06.14.0106
   pullPolicy: Always
 service:
   type: ClusterIP
