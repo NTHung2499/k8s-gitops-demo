@@ -21,7 +21,7 @@ ingress:
   path: /
   pathType: Prefix
 env:
-  PORT: "3000"
+  PORT: "3001"
   MYSQL_HOST: mysql.database.svc.cluster.local
   MYSQL_PORT: "3306"
   MYSQL_DATABASE: appdb
