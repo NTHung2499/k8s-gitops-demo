@@ -19,8 +19,18 @@ service:
   port: 3306
 
 storage:
-  className: local-path
+  existingClaim: mysql-pvc
+  className: manual
   size: 2Gi
+  accessMode: ReadWriteOnce
+  persistentVolume:
+    enabled: true
+    name: mysql-pv
+    hostPath: /data/mysql
+    reclaimPolicy: Retain
+  persistentVolumeClaim:
+    enabled: true
+    name: mysql-pvc
 
 mysqlConfig: |
   [mysqld]

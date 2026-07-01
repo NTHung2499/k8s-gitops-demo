@@ -11,5 +11,15 @@ auth:
   password: apppass123
 
 storage:
-  className: local-path
+  existingClaim: mysql-pvc
+  className: manual
   size: 3Gi
+  accessMode: ReadWriteOnce
+  persistentVolume:
+    enabled: true
+    name: mysql-pv
+    hostPath: /data/mysql
+    reclaimPolicy: Retain
+  persistentVolumeClaim:
+    enabled: true
+    name: mysql-pvc

@@ -76,13 +76,20 @@ spec:
         - name: mysql-config
           configMap:
             name: {{ .Release.Name }}-config
+{{- if .Values.storage.existingClaim }}
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.storage.existingClaim }}
+{{- end }}
+{{- if not .Values.storage.existingClaim }}
   volumeClaimTemplates:
     - metadata:
         name: mysql-data
       spec:
         accessModes:
-          - ReadWriteOnce
+          - {{ .Values.storage.accessMode }}
         storageClassName: {{ .Values.storage.className }}
         resources:
           requests:
             storage: {{ .Values.storage.size }}
+{{- end }}
